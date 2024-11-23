@@ -1,4 +1,6 @@
+import NavBarApp from "./componentes/layout/NavBarApp";
 import "./globals.css";
+import { GlobalProvider } from "@/context/GlobalContext";
 
 // Importar fuentes desde "next/font/google"
 import { Inter } from "next/font/google";
@@ -16,10 +18,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es" className={inter.variable}>
+
       <body className="bg-neutral-light text-neutral-dark font-body">
-        {/* Aquí podrías agregar un Header o Providers si fuera necesario */}
-        {children}
+        <NavBarApp />
+        <GlobalProvider>{children}</GlobalProvider>
+
       </body>
     </html>
   );
 }
+

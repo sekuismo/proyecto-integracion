@@ -1,28 +1,33 @@
 // src/app/workshops/components/SearchBar.jsx
-const SearchBar = ({ onSearch }) => {
-    const handleSearch = (e) => {
-      e.preventDefault();
-      const query = e.target.elements.search.value.trim();
-      onSearch(query);
-    };
-  
-    return (
-      <form onSubmit={handleSearch} className="flex gap-4 mb-6">
-        <input
-          type="text"
-          name="search"
-          placeholder="Buscar talleres cercanos..."
-          className="flex-grow border border-neutral-dark p-2 rounded-md"
-        />
-        <button
-          type="submit"
-          className="bg-primary text-neutral-light px-4 py-2 rounded-md hover:bg-primary-dark"
-        >
-          Buscar
-        </button>
-      </form>
-    );
-  };
-  
-  export default SearchBar;
-  
+import { useState, useEffect } from "react";
+
+const SearchBar = ({ workshops, onSearch }) => {
+  const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      const results = workshops.filter(
+        (workshop) =>
+          workshop.name.toLowerCase().includes(query.toLowerCase()) ||
+          workshop.location.toLowerCase().includes(query.toLowerCase())
+      );
+      onSearch(results);
+    }, 300);
+
+    return () => clearTimeout(handler);
+  }, [query, workshops, onSearch]);
+
+  return (
+    <div className="relative">
+      <input
+        type="text"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Buscar talleres..."
+        className="w-full p-2 border border-neutral-dark rounded-md focus:ring-2 focus:ring-primary focus:outline-none"
+      />
+    </div>
+  );
+};
+
+export default SearchBar;
