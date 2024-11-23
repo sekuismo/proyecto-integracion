@@ -5,7 +5,7 @@ export default function Home() {
   return (
 <div>
   <NavBarApp/>
-  <h1>Aplicación de bicicletas</h1>
+  <h1>Aplicación de bicicletas </h1>
 </div>
   );
 }
