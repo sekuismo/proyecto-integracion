@@ -19,6 +19,9 @@ const NavBarApp = () => {
           <Link href="/workshops" className="hover:underline">
             Talleres
           </Link>
+          <Link href="/new"  className='hover:underline'>
+          Agregar taller
+          </Link>
           <Link href="/profile" className="hover:underline">
             Perfil
           </Link>
