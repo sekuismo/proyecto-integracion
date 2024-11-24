@@ -1,4 +1,3 @@
-// src/app/workshops/components/SearchBar.jsx
 import { useState, useEffect } from "react";
 
 const SearchBar = ({ workshops, onSearch }) => {
@@ -9,7 +8,7 @@ const SearchBar = ({ workshops, onSearch }) => {
       const results = workshops.filter(
         (workshop) =>
           workshop.name.toLowerCase().includes(query.toLowerCase()) ||
-          workshop.location.toLowerCase().includes(query.toLowerCase())
+          workshop.commune.toLowerCase().includes(query.toLowerCase())
       );
       onSearch(results);
     }, 300);
@@ -23,7 +22,7 @@ const SearchBar = ({ workshops, onSearch }) => {
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Buscar talleres..."
+        placeholder="Buscar talleres por nombre o comuna..."
         className="w-full p-2 border border-neutral-dark rounded-md focus:ring-2 focus:ring-primary focus:outline-none"
       />
     </div>

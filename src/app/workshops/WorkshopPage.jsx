@@ -1,25 +1,38 @@
-// src/app/workshops/WorkshopPage.jsx
 "use client";
 
-import { useWorkshops } from "../../context/WorkshopContext";
 import SearchBar from "./components/SearchBar";
 import WorkshopList from "./components/WorkshopList";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const WorkshopPage = () => {
-  const { workshops, loading, error } = useWorkshops();
+  const [workshops, setWorkshops] = useState([]);
   const [filteredWorkshops, setFilteredWorkshops] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Actualizar talleres filtrados cuando cambian los datos
   useEffect(() => {
-    setFilteredWorkshops(workshops);
-  }, [workshops]);
+    const fetchWorkshops = async () => {
+      try {
+        const res = await fetch("/api/data"); // Ruta simulada
+        if (!res.ok) throw new Error("Error al cargar los datos");
+        const data = await res.json();
+        setWorkshops(data.workshops); // Consumir la clave "workshops"
+        setFilteredWorkshops(data.workshops);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchWorkshops();
+  }, []);
 
   if (loading) return <p>Cargando talleres...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div className="container mx-auto px-4 py-6 ">
+    <div className="container mx-auto px-4 py-6">
       <h1 className="text-3xl font-pixel text-primary mb-6 text-center">
         Encuentra el Taller Perfecto
       </h1>

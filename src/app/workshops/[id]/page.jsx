@@ -26,7 +26,7 @@ const WorkshopMapEmbed = ({ mapUrl }) => {
 };
 
 export default function WorkshopDetails({ params }) {
-  const { id } = React.use(params);
+  const { id } =  React.use(params)  
   const [workshop, setWorkshop] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -37,17 +37,15 @@ export default function WorkshopDetails({ params }) {
     const fetchWorkshopDetails = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/workshops`);
+        const response = await fetch("/api/data"); // Llamada a la API simulada
         if (!response.ok) throw new Error("Error al cargar los detalles del taller");
 
         const data = await response.json();
-
-        // Filtrar el taller correspondiente por ID
-        const selectedWorkshop = data.find((workshop) => workshop.id === parseInt(id, 10));
+        const selectedWorkshop = data.workshops.find((workshop) => workshop.id === parseInt(id, 10)); // Filtrar por ID
         if (!selectedWorkshop) throw new Error("Taller no encontrado");
 
         setWorkshop(selectedWorkshop);
-        setComments(selectedWorkshop.reviews);
+        setComments(selectedWorkshop.reviews || []); // Asegurarse de manejar si no hay reseñas
       } catch (err) {
         setError(err.message);
       } finally {
@@ -60,11 +58,15 @@ export default function WorkshopDetails({ params }) {
 
   const handleAddComment = () => {
     if (newComment.trim()) {
-      setComments([
-        ...comments,
-        { user: "Usuario Anónimo", comment: newComment.trim() }, // Simulación de usuario
-      ]);
+      const newReview = { user: "Usuario Anónimo", comment: newComment.trim() }; // Simulación de usuario
+      setComments([...comments, newReview]);
       setNewComment("");
+
+      // Simular persistencia en el backend
+      setWorkshop((prev) => ({
+        ...prev,
+        reviews: [...prev.reviews, newReview],
+      }));
     }
   };
 
@@ -74,9 +76,13 @@ export default function WorkshopDetails({ params }) {
   return (
     <div className="container mx-auto px-4 py-6">
       <h1 className="text-3xl font-pixel text-primary mb-4">{workshop.name}</h1>
-      <p className="text-neutral-dark mb-2">Ubicación: {workshop.location}</p>
-      <p className="text-neutral-dark mb-2">Puntuación: {workshop.rating}</p>
-      <p className="text-neutral-dark mb-2">Servicios: {workshop.services.join(", ")}</p>
+      <p className="text-neutral-dark mb-2">
+        Ubicación: {workshop.address}, {workshop.commune}, {workshop.city}
+      </p>
+      <p className="text-neutral-dark mb-2">Puntuación: {workshop.reviews.length > 0 ? workshop.reviews[0].rating : "Sin calificación"}</p>
+      <p className="text-neutral-dark mb-2">
+        Servicios: {workshop.services.map((service) => service.service_name).join(", ")}
+      </p>
       <p className="text-neutral-dark mb-4">
         Descripción: {workshop.description || "Sin descripción disponible"}
       </p>
