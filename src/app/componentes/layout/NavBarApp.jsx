@@ -8,7 +8,7 @@ const NavBarApp = () => {
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
         <Link href="/" className="text-xl font-bold">
-          BikeWorkshops
+          Talleres certeros
         </Link>
 
         {/* Links de navegación */}

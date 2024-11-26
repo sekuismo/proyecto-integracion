@@ -1,0 +1,36 @@
+.home-container {
+    background-image: url("/backimg.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh; /* Ocupa toda la altura de la pantalla */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white; /* Texto blanco para contrastar con la imagen oscura */
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .home-content {
+    max-width: 600px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.6); /* Fondo semitransparente para resaltar el texto */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  }
+  
+  .home-title {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .home-subtitle {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    font-family: 'Arial', sans-serif;
+  }
+  

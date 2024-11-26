@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import React from "react";
+import { useState } from "react";
 import NotFoundWorkshop from "../components/NotFoundWorkshop";
 
-// Componente reutilizable para mostrar el mapa
+import useWorkshops from "@/app/Hooks/UseWorkshops";
+
 const WorkshopMapEmbed = ({ mapUrl }) => {
-  if (!mapUrl) return null; // Si no hay URL, no renderiza nada
+  if (!mapUrl) return null;
 
   return (
     <div className="mt-6">
@@ -26,70 +27,75 @@ const WorkshopMapEmbed = ({ mapUrl }) => {
 };
 
 export default function WorkshopDetails({ params }) {
-  const { id } =  React.use(params)  
-  const [workshop, setWorkshop] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { id } = React.use(params)
+  const { workshops, loading, error } = useWorkshops();
   const [newComment, setNewComment] = useState("");
   const [comments, setComments] = useState([]);
 
-  useEffect(() => {
-    const fetchWorkshopDetails = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch("/api/data"); // Llamada a la API simulada
-        if (!response.ok) throw new Error("Error al cargar los detalles del taller");
+  // Encontrar el taller específico por su ID
+  const workshop = workshops.find((w) => w.id === parseInt(id, 10));
 
-        const data = await response.json();
-        const selectedWorkshop = data.workshops.find((workshop) => workshop.id === parseInt(id, 10)); // Filtrar por ID
-        if (!selectedWorkshop) throw new Error("Taller no encontrado");
-
-        setWorkshop(selectedWorkshop);
-        setComments(selectedWorkshop.reviews || []); // Asegurarse de manejar si no hay reseñas
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchWorkshopDetails();
-  }, [id]);
+  if (loading) return <p className="text-center">Cargando taller...</p>;
+  if (error || !workshop) return <NotFoundWorkshop />;
 
   const handleAddComment = () => {
     if (newComment.trim()) {
-      const newReview = { user: "Usuario Anónimo", comment: newComment.trim() }; // Simulación de usuario
+      const newReview = { user: "Usuario Anónimo", comment: newComment.trim() };
       setComments([...comments, newReview]);
       setNewComment("");
-
-      // Simular persistencia en el backend
-      setWorkshop((prev) => ({
-        ...prev,
-        reviews: [...prev.reviews, newReview],
-      }));
     }
   };
-
-  if (loading) return <p className="text-center">Cargando taller...</p>;
-  if (error) return <NotFoundWorkshop />;
 
   return (
     <div className="container mx-auto px-4 py-6">
       <h1 className="text-3xl font-pixel text-primary mb-4">{workshop.name}</h1>
-      <p className="text-neutral-dark mb-2">
-        Ubicación: {workshop.address}, {workshop.commune}, {workshop.city}
-      </p>
-      <p className="text-neutral-dark mb-2">Puntuación: {workshop.reviews.length > 0 ? workshop.reviews[0].rating : "Sin calificación"}</p>
-      <p className="text-neutral-dark mb-2">
-        Servicios: {workshop.services.map((service) => service.service_name).join(", ")}
+
+      {/* Información detallada del taller */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div>
+          <p className="text-neutral-dark mb-2">
+            <strong>Dirección:</strong> {workshop.address || "No disponible"}
+          </p>
+          <p className="text-neutral-dark mb-2">
+            <strong>Comuna:</strong> {workshop.commune || "No disponible"}
+          </p>
+          <p className="text-neutral-dark mb-2">
+            <strong>Ciudad:</strong> {workshop.city || "No disponible"}
+          </p>
+          <p className="text-neutral-dark mb-2">
+            <strong>País:</strong> {workshop.country || "No disponible"}
+          </p>
+        </div>
+        <div>
+          <p className="text-neutral-dark mb-2">
+            <strong>Teléfono:</strong> {workshop.phone_number || "No disponible"}
+          </p>
+          <p className="text-neutral-dark mb-2">
+            <strong>Email:</strong> {workshop.email || "No disponible"}
+          </p>
+          <p className="text-neutral-dark mb-2">
+            <strong>Coordenadas:</strong>{" "}
+            {workshop.latitude && workshop.longitude
+              ? `${workshop.latitude}, ${workshop.longitude}`
+              : "No disponibles"}
+          </p>
+        </div>
+      </div>
+
+      <p className="text-neutral-dark mb-4">
+        <strong>Descripción:</strong> {workshop.description || "Sin descripción disponible"}
       </p>
       <p className="text-neutral-dark mb-4">
-        Descripción: {workshop.description || "Sin descripción disponible"}
+        <strong>Creado el:</strong> {new Date(workshop.created_at).toLocaleString()}
+      </p>
+      <p className="text-neutral-dark mb-4">
+        <strong>Última actualización:</strong> {new Date(workshop.updated_at).toLocaleString()}
       </p>
 
-      {/* Mapa del taller */}
+      {/* Mapa */}
       <WorkshopMapEmbed mapUrl={workshop.mapUrl} />
 
+      {/* Reseñas */}
       <h2 className="text-xl font-bold mb-4 text-neutral-dark">Reseñas:</h2>
       {comments.length > 0 ? (
         <ul className="list-disc list-inside space-y-2">
@@ -103,7 +109,7 @@ export default function WorkshopDetails({ params }) {
         <p className="text-neutral-dark">No hay reseñas disponibles para este taller.</p>
       )}
 
-      {/* Formulario para agregar nuevos comentarios */}
+      {/* Formulario de comentarios */}
       <div className="mt-6">
         <h3 className="text-lg font-bold mb-2">Deja tu comentario:</h3>
         <textarea

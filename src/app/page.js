@@ -1,11 +1,11 @@
-import Image from "next/image";
-import NavBarApp from "./componentes/layout/NavBarApp";
+
+import HomeComponent from "./componentes/layout/HomeComponent";
 
 export default function Home() {
   return (
 <div>
 
-  <h1>Aplicación de bicicletas </h1>
+  <HomeComponent/>
 </div>
   );
 }
