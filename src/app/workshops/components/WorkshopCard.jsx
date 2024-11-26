@@ -13,17 +13,17 @@ const WorkshopCard = ({ workshop }) => {
     <div className="bg-white border border-neutral-dark rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 w-full">
       <div className="flex justify-between items-center mb-2">
         <h2 className="text-2xl font-bold text-primary">{workshop.name}</h2>
-        <RatingBadge rating={workshop.reviews.length > 0 ? workshop.reviews[0].rating : 0} />
+        {/* <RatingBadge rating={workshop.reviews.length > 0 ? workshop.reviews[0].rating : 0} /> */}
       </div>
       <p className="text-neutral-dark mb-2">
         Ubicación: {workshop.address}, {workshop.commune}, {workshop.city}
       </p>
       <p className="text-primary mb-4">
-        Servicios: {workshop.services.map((s) => s.service_name).join(", ")}
+        {/* Servicios: {workshop.services.map((s) => s.service_name).join(", ")} */}
       </p>
       
       {/* Mostrar los 3 comentarios más relevantes */}
-      <ReviewSummary reviews={workshop.reviews} maxReviews={3} />
+      {/* <ReviewSummary reviews={workshop.reviews} maxReviews={3} /> */}
 
       <div className="flex justify-between items-center mt-4">
         <Link
