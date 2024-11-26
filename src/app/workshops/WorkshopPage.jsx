@@ -1,32 +1,18 @@
 "use client";
-
+import { useState,useEffect } from "react";
 import SearchBar from "./components/SearchBar";
 import WorkshopList from "./components/WorkshopList";
-import { useState, useEffect } from "react";
+
+import useWorkshops from "../Hooks/UseWorkshops";
 
 const WorkshopPage = () => {
-  const [workshops, setWorkshops] = useState([]);
+  const { workshops, loading, error } = useWorkshops(); // Usar el hook
   const [filteredWorkshops, setFilteredWorkshops] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
+  // Sincronizar talleres filtrados con el estado inicial de los talleres
   useEffect(() => {
-    const fetchWorkshops = async () => {
-      try {
-        const res = await fetch("/api/data"); // Ruta simulada
-        if (!res.ok) throw new Error("Error al cargar los datos");
-        const data = await res.json();
-        setWorkshops(data.workshops); // Consumir la clave "workshops"
-        setFilteredWorkshops(data.workshops);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
-
-    fetchWorkshops();
-  }, []);
+    setFilteredWorkshops(workshops);
+  }, [workshops]);
 
   if (loading) return <p>Cargando talleres...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
