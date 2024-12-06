@@ -32,16 +32,13 @@ const NavBarApp = () => {
             Talleres
           </Link>
           {user && (
-            <Link href="/new" className="hover:underline">
-              Agregar taller
-            </Link>
-          )}
-          <Link href="/profile" className="hover:underline">
-            Perfil
-          </Link>
-
-          {user ? (
             <>
+              <Link href="/new" className="hover:underline">
+                Agregar taller
+              </Link>
+              <Link href="/profile" className="hover:underline">
+                Perfil
+              </Link>
               <span className="text-gray-300">Hola, {user.username}</span>
               <button
                 onClick={handleLogout}
@@ -50,7 +47,8 @@ const NavBarApp = () => {
                 Cerrar sesión
               </button>
             </>
-          ) : (
+          )}
+          {!user && (
             <Link href="/login" className="hover:underline">
               Iniciar Sesión
             </Link>
