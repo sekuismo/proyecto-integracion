@@ -1,3 +1,4 @@
+import { AuthProvider } from "@/context/AuthProvider";
 import NavBarApp from "./componentes/layout/NavBarApp";
 import "./globals.css";
 import { GlobalProvider } from "@/context/GlobalContext";
@@ -20,9 +21,10 @@ export default function RootLayout({ children }) {
     <html lang="es" className={inter.variable}>
 
       <body className="bg-neutral-light text-neutral-dark font-body">
+        <AuthProvider>
         <NavBarApp />
         <GlobalProvider>{children}</GlobalProvider>
-
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,8 +1,20 @@
 // src/app/components/common/NavBarApp.js
 
-import Link from 'next/link';
+"use client";
+
+import Link from "next/link";
+import { useAuth } from "@/context/AuthProvider";
+import { useRouter } from "next/navigation";
 
 const NavBarApp = () => {
+  const { user, logout } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout(); // Lógica para cerrar sesión
+    router.push("/"); // Redirige a la página principal
+  };
+
   return (
     <nav className="bg-gray-800 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
@@ -12,22 +24,37 @@ const NavBarApp = () => {
         </Link>
 
         {/* Links de navegación */}
-        <div className="space-x-4">
+        <div className="space-x-4 flex items-center">
           <Link href="/" className="hover:underline">
             Inicio
           </Link>
           <Link href="/workshops" className="hover:underline">
             Talleres
           </Link>
-          <Link href="/new"  className='hover:underline'>
-          Agregar taller
-          </Link>
+          {user && (
+            <Link href="/new" className="hover:underline">
+              Agregar taller
+            </Link>
+          )}
           <Link href="/profile" className="hover:underline">
             Perfil
           </Link>
-          <Link href="/login" className="hover:underline">
-            Iniciar Sesión
-          </Link>
+
+          {user ? (
+            <>
+              <span className="text-gray-300">Hola, {user.username}</span>
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded"
+              >
+                Cerrar sesión
+              </button>
+            </>
+          ) : (
+            <Link href="/login" className="hover:underline">
+              Iniciar Sesión
+            </Link>
+          )}
         </div>
       </div>
     </nav>
