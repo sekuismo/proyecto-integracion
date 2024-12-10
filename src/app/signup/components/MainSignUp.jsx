@@ -18,12 +18,9 @@ function MainSignUp() {
       is_staff: false,
     },
     validationSchema: Yup.object({
-      first_name: Yup.string()
-        .required("El nombre es obligatorio"),
-      last_name: Yup.string()
-        .required("El apellido es obligatorio"),
-      username: Yup.string()
-        .required("El nombre de usuario es obligatorio"),
+      first_name: Yup.string().required("El nombre es obligatorio"),
+      last_name: Yup.string().required("El apellido es obligatorio"),
+      username: Yup.string().required("El nombre de usuario es obligatorio"),
       password: Yup.string()
         .min(8, "La contraseña debe tener al menos 8 caracteres")
         .matches(/[A-Za-z]/, "Debe contener al menos una letra")
@@ -36,6 +33,8 @@ function MainSignUp() {
         .email("Debe ser un correo electrónico válido")
         .required("El correo electrónico es obligatorio"),
       is_staff: Yup.boolean(),
+
+      
     }),
     onSubmit: async (values) => {
       const { confirmPassword, ...dataToSend } = values;
@@ -63,7 +62,9 @@ function MainSignUp() {
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {formik.touched.first_name && formik.errors.first_name && (
-              <p className="text-red-500 text-sm mt-1">{formik.errors.first_name}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {formik.errors.first_name}
+              </p>
             )}
           </div>
           <div>
@@ -79,7 +80,9 @@ function MainSignUp() {
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {formik.touched.last_name && formik.errors.last_name && (
-              <p className="text-red-500 text-sm mt-1">{formik.errors.last_name}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {formik.errors.last_name}
+              </p>
             )}
           </div>
           <div>
@@ -95,7 +98,9 @@ function MainSignUp() {
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {formik.touched.username && formik.errors.username && (
-              <p className="text-red-500 text-sm mt-1">{formik.errors.username}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {formik.errors.username}
+              </p>
             )}
           </div>
           <div>
@@ -111,7 +116,9 @@ function MainSignUp() {
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {formik.touched.password && formik.errors.password && (
-              <p className="text-red-500 text-sm mt-1">{formik.errors.password}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {formik.errors.password}
+              </p>
             )}
           </div>
           <div>
@@ -127,7 +134,9 @@ function MainSignUp() {
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-              <p className="text-red-500 text-sm mt-1">{formik.errors.confirmPassword}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {formik.errors.confirmPassword}
+              </p>
             )}
           </div>
           <div>
@@ -141,7 +150,9 @@ function MainSignUp() {
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {formik.touched.email && formik.errors.email && (
-              <p className="text-red-500 text-sm mt-1">{formik.errors.email}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {formik.errors.email}
+              </p>
             )}
           </div>
           <div>
@@ -156,6 +167,7 @@ function MainSignUp() {
               ¿Es administrador (staff)?
             </label>
           </div>
+
           <button
             type="submit"
             disabled={loading}

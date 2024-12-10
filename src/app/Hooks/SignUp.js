@@ -17,13 +17,21 @@ export default function useSignUp() {
 
     try {
       // Validar los datos del formulario antes de enviar
-      const { username, password, description, email } = userData;
-      if (!username || !password || !description || !description.content) {
+      const { username, password, email } = userData;
+      if (!username || !password || !email) {
         throw new Error("Todos los campos obligatorios deben ser completados.");
       }
 
-      // Enviar la solicitud de registro
-      const response = await axios.post(API_SIGNUP_URL, userData);
+      // Agregamos el objeto description con content: "test"
+      const dataToSend = {
+        ...userData,
+        description: {
+          content: "test",
+        },
+      };
+
+      // Enviar la solicitud de registro con el contenido agregado
+      const response = await axios.post(API_SIGNUP_URL, dataToSend);
 
       if (response.status === 201) {
         setSuccess(true); // Indicar que el registro fue exitoso
@@ -33,7 +41,11 @@ export default function useSignUp() {
     } catch (err) {
       // Manejo de errores
       if (axios.isAxiosError(err)) {
-        const backendMessage = err.response?.data || "Error en el servidor.";
+        // Extraer mensaje de error del backend si existe
+        const backendMessage =
+          typeof err.response?.data === "string"
+            ? err.response.data
+            : err.response?.data?.description || "Error en el servidor.";
         setError(backendMessage);
       } else {
         setError(err.message || "Error inesperado.");
