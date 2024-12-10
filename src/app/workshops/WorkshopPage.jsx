@@ -1,13 +1,17 @@
 "use client";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import SearchBar from "./components/SearchBar";
 import WorkshopList from "./components/WorkshopList";
-
 import useWorkshops from "../Hooks/UseWorkshops";
 
 const WorkshopPage = () => {
-  const { workshops, loading, error } = useWorkshops(); // Usar el hook
+  const { workshops, loading, error, fetchWorkshops } = useWorkshops(); // Usar el hook
   const [filteredWorkshops, setFilteredWorkshops] = useState([]);
+
+  // Llamar a fetchWorkshops al montar el componente
+  useEffect(() => {
+    fetchWorkshops();
+  }, []);
 
   // Sincronizar talleres filtrados con el estado inicial de los talleres
   useEffect(() => {

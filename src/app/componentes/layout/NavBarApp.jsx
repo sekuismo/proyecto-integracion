@@ -31,7 +31,7 @@ const NavBarApp = () => {
           <Link href="/workshops" className="hover:underline">
             Talleres
           </Link>
-          {user && (
+          {user ? (
             <>
               <Link href="/new" className="hover:underline">
                 Agregar taller
@@ -47,11 +47,15 @@ const NavBarApp = () => {
                 Cerrar sesión
               </button>
             </>
-          )}
-          {!user && (
-            <Link href="/login" className="hover:underline">
-              Iniciar Sesión
-            </Link>
+          ) : (
+            <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0">
+              <Link href="/login" className="hover:underline">
+                Iniciar Sesión
+              </Link>
+              <Link href="/signup" className="hover:underline">
+                Registrarse
+              </Link>
+            </div>
           )}
         </div>
       </div>

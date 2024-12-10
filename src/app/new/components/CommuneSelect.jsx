@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
 
-const communes = [
+const comunas = [
     'Alhué', 'Buin', 'Calera de Tango', 'Cerrillos', 'Cerro Navia', 'Colina', 'Conchalí',
     'Curacaví', 'El Bosque', 'El Monte', 'Estación Central', 'Huechuraba', 'Independencia',
     'Isla de Maipo', 'La Cisterna', 'La Florida', 'La Granja', 'La Pintana', 'La Reina',
@@ -18,14 +18,14 @@ const CommuneSelect = ({ value, onChange }) => {
         <div>
             <label htmlFor="commune" className="block text-gray-700">Comuna</label>
             <select
-                id="commune"
+                id="comuna"
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
                 <option value="" disabled>Selecciona una comuna</option>
-                {communes.map((commune) => (
-                    <option key={commune} value={commune}>{commune}</option>
+                {comunas.map((comuna) => (
+                    <option key={comuna} value={comuna}>{comuna}</option>
                 ))}
             </select>
         </div>

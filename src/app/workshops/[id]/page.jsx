@@ -1,29 +1,27 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import NotFoundWorkshop from "../components/NotFoundWorkshop";
 import useWorkshops from "@/app/Hooks/UseWorkshops";
 import WorkshopGeneralInfo from "../componentsDetail/WorkshopGeneralInfo";
-
 import WorkshopMap from "../componentsDetail/WorkshopMap";
-import WorkshopServices from "../components/WorkshopsServices"
+import WorkshopServices from "../components/WorkshopsServices";
 import WorkshopReviews from "../componentsDetail/WorkshopReviews";
 import WorkshopCommentForm from "../componentsDetail/WorkshopCommentForm";
 
 export default function WorkshopDetails() {
   const params = useParams();
   const { id } = params || {};
-  const { workshops, loading, error } = useWorkshops();
+  const { selectedWorkshop, loading, error, fetchWorkshopById } = useWorkshops();
   const [newComment, setNewComment] = useState("");
   const [comments, setComments] = useState([]);
 
-  if (!id) {
-    return <p className="text-center">Cargando...</p>;
-  }
-
-  const workshopId = parseInt(id, 10);
-  const workshop = workshops?.find((w) => w.id === workshopId);
+  useEffect(() => {
+    if (id) {
+      fetchWorkshopById(id); // Cargar el taller específico por ID
+    }
+  }, [id]);
 
   const handleAddComment = () => {
     if (newComment.trim()) {
@@ -36,24 +34,22 @@ export default function WorkshopDetails() {
   if (loading) {
     return <p className="text-center">Cargando información...</p>;
   }
-  if (error || !workshop) {
+
+  if (error || !selectedWorkshop) {
     return <NotFoundWorkshop />;
   }
 
   return (
     <div className="max-w-screen-lg mx-auto px-4 py-8 space-y-12">
-      <h1 className="text-3xl font-pixel text-primary mb-4">{workshop.name}</h1>
-      <WorkshopGeneralInfo workshop={workshop} />
+      <h1 className="text-3xl font-pixel text-primary mb-4">{selectedWorkshop.name}</h1>
+      <WorkshopGeneralInfo workshop={selectedWorkshop} />
       <p className="text-neutral-dark mb-4">
-        <strong>Descripción:</strong> {workshop.description || "Sin descripción disponible"}
+        <strong>Descripción:</strong> {selectedWorkshop.description || "Sin descripción disponible"}
       </p>
-      <WorkshopMap mapUrl={workshop.mapUrl} />
-      <WorkshopServices workshopId={workshopId} />
-      <WorkshopReviews workshopId={workshopId} />
-      <WorkshopCommentForm
-      workshopId={workshopId}
-
-      />
+      <WorkshopMap mapUrl={selectedWorkshop.mapUrl} />
+      <WorkshopServices workshopId={selectedWorkshop.id} />
+      <WorkshopReviews workshopId={selectedWorkshop.id} />
+      <WorkshopCommentForm workshopId={selectedWorkshop.id} />
     </div>
   );
 }
